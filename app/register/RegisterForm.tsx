@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Heading from "../components/Heading";
 import Input from "../components/inputs/Input";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
@@ -11,8 +12,13 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { SafeUser } from "@/types";
 
-const RegisterForm = () => {
+interface RegisterFormProps {
+  currentUser: SafeUser | null;
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ currentUser }) => {
   const [isLoading, setIsLading] = useState(false);
   const {
     register,
@@ -28,6 +34,13 @@ const RegisterForm = () => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (currentUser) {
+      router.push("/");
+      router.refresh();
+    }
+  }, []);
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLading(true);
     axios
@@ -40,7 +53,7 @@ const RegisterForm = () => {
           redirect: false,
         }).then((callback) => {
           if (callback?.ok) {
-            router.push("/cart");
+            router.push("/");
             router.refresh();
             toast.success("Logged In");
           }
@@ -54,6 +67,10 @@ const RegisterForm = () => {
         setIsLading(false);
       });
   };
+
+  if (currentUser) {
+    return <p className="text-center">Already logged in. Redirecting...</p>;
+  }
 
   return (
     <>
