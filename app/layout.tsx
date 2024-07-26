@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "Ecommerce website",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
