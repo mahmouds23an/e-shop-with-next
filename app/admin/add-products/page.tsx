@@ -10,7 +10,7 @@ const AddProducts = async () => {
     return <NullData title="Ooops! Access denied" />;
   }
   return (
-    <div className="p-8">
+    <div className="px-8 -mt-10">
       <Container>
         <FormWrap>
           <AddProductsForm />
